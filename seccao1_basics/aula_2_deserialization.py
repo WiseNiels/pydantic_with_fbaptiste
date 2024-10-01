@@ -2,3 +2,25 @@
 
 from pydantic import BaseModel, ValidationError
 
+class Person(BaseModel):
+    # as variaveis de classes sao chamadas de fields
+    first_name: str
+    last_name: str
+    age: int
+    
+    
+
+
+p = Person(first_name='Wise', last_name='Muronha', age=27)
+
+data = {
+    'first_name':'Niels',
+    'last_name': 'Jenny',
+    'age': 23
+}
+
+# Deserializando a partit de um dicionario python
+
+p = Person.model_validate(data)
+
+print(p)
