@@ -2,6 +2,7 @@
 
 from pydantic import BaseModel, ValidationError
 
+
 class Person(BaseModel):
     # as variaveis de classes sao chamadas de fields
     first_name: str
@@ -19,8 +20,10 @@ data = {
     'age': 23
 }
 
-# Deserializando a partit de um dicionario python
+# Deserializando a partir de um dicionario python
 
 p = Person.model_validate(data)
 
 print(p)
+
+
