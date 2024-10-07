@@ -24,3 +24,18 @@ data = {
 p = Person.model_validate(data)
 
 print(p)
+
+data_json = '''
+{
+    
+"first_name":"Wise",
+"last_name":"Nided",
+"age":23
+}
+
+'''
+
+# Para fazer o deserializing de Json usamos o metodo model_validate_json()
+
+p2 = Person.model_validate_json(data_json)
+print(p2)
