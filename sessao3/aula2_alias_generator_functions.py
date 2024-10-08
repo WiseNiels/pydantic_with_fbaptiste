@@ -1,41 +1,43 @@
-from datetime import datetime, timedelta
-import os
+from pydantic import BaseModel, ValidationError, Field, ConfigDict
+from pydantic.alias_generators import to_camel, to_snake, to_pascal
 
 
-caminho = r'C:\Users\c866790\Downloads'
-
-caminho_bot_1= r''
-
-meses = {
-    '01': 'Janeiro',
-    '02': 'Fevereiro',
-    '03': 'Março',
-    '04': 'Abril',
-    '05': 'Maio',
-    '06': 'Junho',
-    '07': 'Julho',
-    '08': 'Agosto',
-    '09': 'Setembro',
-    '10': 'Outubro',
-    '11': 'Novembro',
-    '12': 'Dezembro'
-}
+print(to_camel('last_name'))
 
 
-hoje = datetime.now().date() - timedelta(days=8)
-print(hoje)
 
-hoje_str = str(hoje).split('-')
-print(hoje_str)
 
-dia = hoje_str[2]
-mes = hoje_str[1]
-ano = hoje_str[0]
+def make_upper(in_str: str)->str:
+    return in_str.upper()
 
-print(meses['07'])
-caminho_novo = os.path.join(caminho, ano, meses[mes])
-print(caminho_novo)
 
-print(hoje.weekday())
+class Model(BaseModel):
+    model_config = ConfigDict(alias_generator=make_upper) # Esta onfiguracao faz com que o pydantic crie os alias com base no retorno da funcao passada
+    id_: int
+    first_name: str | None = None
+    last_name: str
+    age: int|None = None
 
+
+# print(Model.model_fields)
+
+# m = Model(id_=1, first_name='Wise', last_name='Muronha', age=45) # Lanca um erro
+
+
+def make_alias(field_name)->str:
+    alias = to_camel(field_name)
+    return alias.removesuffix('_')
+    
+
+class Person(BaseModel):
+    model_config = ConfigDict(alias_generator=make_alias, populate_by_name=True) # Esta onfiguracao faz com que o pydantic crie os alias com base no retorno da funcao passada
+    id_: int 
+    filter_: bool |None = None
+    first_name: str | None = None
+    last_name: str
+    age: int|None = None
+
+print(Person.model_fields)
+print(Person(id=2, firstName='WIse', lastName='NIels', age=45))
+print(Person(id_=3, first_name='WIse', last_name='Paulo', age=34).model_dump_json(by_alias=True))
 
