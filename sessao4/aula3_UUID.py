@@ -9,5 +9,10 @@ class Person(BaseModel):
 
 
 p = Person(id=uuid4())
-print(p)
-print(p.model_dump_json())
+p2 = Person(id=uuid4())
+print(p, p2)
+# print(p.model_dump_json())
+
+
+class Person(BaseModel):
+    id: UUID4 = Field(default_factory=uuid4) # essa propriedade chama a funcao uuid4 sempre que nova instancia da class e' criada
