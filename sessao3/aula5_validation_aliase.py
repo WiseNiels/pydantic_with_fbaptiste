@@ -19,7 +19,8 @@ data = {"GivenName": "Wise", "lastName": "Muronha"}
 class Model(BaseModel):
     model_config = ConfigDict(populate_by_name=True, alias_generator=to_camel)
     first_name: str = Field(
-        validation_alias=AliasChoices("FirstName", "GivenName"), #aqui podemos usar tanto FirstName como GivenName no deserializer
+        # aqui podemos usar tanto FirstName como GivenName no deserializer
+        validation_alias=AliasChoices("FirstName", "GivenName"),
         serialization_alias="givenName",
     )
     last_name: str

@@ -1,9 +1,8 @@
-# Before Validator
-
-from pydantic import BaseModel, Field, ValidationError, field_validator
+from pydantic import BaseModel, Field, ValidationError, field_validator, BeforeValidator
 from dateutil.parser import parse
 from datetime import datetime
-from typing import Any
+from typing import Any, Annotated
+import pytz
 
 
 class Model(BaseModel):
@@ -21,10 +20,16 @@ class Model(BaseModel):
         print('pass through...')
         return value
 
+    @field_validator('dt')  # after validator
+    @classmethod
+    def make_utc(cls, value: datetime) -> datetime:
+        print('calling after validator')
+        if value.tzinfo is None:
+            dt = pytz.utc.localize(value)
+        else:
+            dt = value.astimezone(pytz.utc)
+        return dt
 
+
+print(Model(dt=100_000))
 print(Model(dt='2020/1/1 3pm'))
-print(Model(dt=datetime.now())) #  A mensagem aqui e' diferente
-
-
-# print(parse('2020/1/1 3pm'))
-# print(type(parse('2020/1/1 3pm')))
